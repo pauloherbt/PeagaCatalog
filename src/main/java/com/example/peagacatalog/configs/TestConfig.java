@@ -1,10 +1,10 @@
 package com.example.peagacatalog.configs;
 
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Configurable
+@Configuration
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
 

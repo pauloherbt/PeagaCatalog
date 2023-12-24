@@ -2,6 +2,7 @@ package com.example.peagacatalog.entities;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.Objects;
 @Entity
 @Table(name = "tb_category")
@@ -10,6 +11,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // VER DIFERENÇA NO POSTEGRESQL
+    private Instant createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
     public Category() {
     }
 
@@ -41,6 +46,24 @@ public class Category {
         Category category = (Category) o;
         return Objects.equals(id, category.id);
     }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+    /*servem para fazer algo antes de persistir(1º)vez ou atualizar n vezes, nesse caso estamos trabalhando com dados de auditoria
+    , registrando os instantes que ocorreram modificações*/
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Instant.now();
+    }
+    @PreUpdate
+    public void preUpdated() {
+        this.updatedAt = Instant.now();
+    }
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
 
     @Override
     public int hashCode() {

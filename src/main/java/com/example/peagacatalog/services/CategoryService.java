@@ -6,6 +6,8 @@ import com.example.peagacatalog.repositories.CategoryRepository;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,5 +44,9 @@ public class CategoryService {
             categoryRepository.deleteById(id);
         else
             throw new EntityNotFoundException("Resource not found id: "+id);
+    }
+
+    public Page<CategoryDTO> findAllPaged(PageRequest pg) {
+        return categoryRepository.findAll(pg).map((x) -> new CategoryDTO(x));
     }
 }

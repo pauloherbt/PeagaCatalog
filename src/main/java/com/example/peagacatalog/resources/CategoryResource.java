@@ -2,20 +2,16 @@ package com.example.peagacatalog.resources;
 
 import com.example.peagacatalog.dto.CategoryDTO;
 import com.example.peagacatalog.services.CategoryService;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/categories")
@@ -23,8 +19,10 @@ public class CategoryResource {
     @Autowired
     private CategoryService categoryService;
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> findAll(){
-        return ResponseEntity.ok(categoryService.findAll());
+    public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(defaultValue = "0") Integer pgNumber, @RequestParam(defaultValue = " 10") Integer pgSize, @RequestParam(defaultValue = "id") String orderBy
+            ,@RequestParam(defaultValue = "ASC") String direction){
+        PageRequest pg = PageRequest.of(pgNumber,pgSize, Sort.Direction.valueOf(direction),orderBy);
+        return ResponseEntity.ok(categoryService.findAllPaged(pg));
     }
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){

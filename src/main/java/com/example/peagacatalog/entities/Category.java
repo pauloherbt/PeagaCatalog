@@ -3,7 +3,10 @@ package com.example.peagacatalog.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @Entity
 @Table(name = "tb_category")
 public class Category {
@@ -11,6 +14,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Product> productList = new HashSet<>();
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // VER DIFERENÇA NO POSTEGRESQL
     private Instant createdAt;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
@@ -45,6 +50,14 @@ public class Category {
         if (o == null || getClass() != o.getClass()) return false;
         Category category = (Category) o;
         return Objects.equals(id, category.id);
+    }
+
+    public Set<Product> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(Set<Product> productList) {
+        this.productList = productList;
     }
 
     public Instant getCreatedAt() {

@@ -12,27 +12,27 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
     private String imgUrl;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant date;
     @ManyToMany
-    @JoinTable(name = "tb_ProductCategory"
+    @JoinTable(name = "tb_product_category"
             , joinColumns = @JoinColumn(name = "product_id"),inverseJoinColumns = @JoinColumn(name="category_id"))
     private Set<Category> categories = new HashSet<>();
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // VER DIFERENÇA NO POSTEGRESQL
-    private Instant createdAt;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-    private Instant updatedAt;
+
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, String imgUrl,Category category) {
+    public Product(Long id, String name, String description, Double price, String imgUrl,Instant date) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imgUrl = imgUrl;
-        addCategory(category);
+        this.date = date;
     }
     public Long getId() {
         return id;
@@ -50,9 +50,6 @@ public class Product {
         this.name = name;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
 
     public String getDescription() {
         return description;
@@ -82,24 +79,12 @@ public class Product {
         return categories;
     }
 
-    public void setCategories(Set<Category> category) {
-        this.categories = category;
+    public Instant getDate() {
+        return date;
     }
-    public void addCategory(Category category){
-        getCategories().add(category);
-    }
-    /*servem para fazer algo antes de persistir(1º)vez ou atualizar n vezes, nesse caso estamos trabalhando com dados de auditoria
-        , registrando os instantes que ocorreram modificações*/
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = Instant.now();
-    }
-    @PreUpdate
-    public void preUpdated() {
-        this.updatedAt = Instant.now();
-    }
-    public Instant getUpdatedAt() {
-        return updatedAt;
+
+    public void setDate(Instant date) {
+        this.date = date;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.example.peagacatalog.resources;
 
 import com.example.peagacatalog.dto.ProductDTO;
 import com.example.peagacatalog.services.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +16,12 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/products")
 public class ProductResource {
-    @Autowired
     private ProductService productService;
+
+    public ProductResource(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping()
     public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(defaultValue = "0") Integer pgNumber
             , @RequestParam(defaultValue = " 10") Integer pgSize

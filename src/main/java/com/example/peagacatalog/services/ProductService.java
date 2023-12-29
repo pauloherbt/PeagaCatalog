@@ -6,7 +6,6 @@ import com.example.peagacatalog.repositories.CategoryRepository;
 import com.example.peagacatalog.repositories.ProductRepository;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,10 +15,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
-    @Autowired
     private ProductRepository productRepository;
-    @Autowired
     private CategoryRepository categoryRepository;
+
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+    }
 
     @Transactional
     public Page<ProductDTO> findAll(Pageable pg) {

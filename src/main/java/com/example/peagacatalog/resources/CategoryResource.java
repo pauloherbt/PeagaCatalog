@@ -2,7 +2,6 @@ package com.example.peagacatalog.resources;
 
 import com.example.peagacatalog.dto.CategoryDTO;
 import com.example.peagacatalog.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,8 +15,12 @@ import java.net.URI;
 @RestController
 @RequestMapping(value = "/categories")
 public class CategoryResource {
-    @Autowired
     private CategoryService categoryService;
+
+    public CategoryResource(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
     @GetMapping
     public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(defaultValue = "0") Integer pgNumber, @RequestParam(defaultValue = " 10") Integer pgSize, @RequestParam(defaultValue = "id") String orderBy
             ,@RequestParam(defaultValue = "ASC") String direction){

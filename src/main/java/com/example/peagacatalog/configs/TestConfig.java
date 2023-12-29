@@ -10,10 +10,15 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("test")
 public class TestConfig implements CommandLineRunner {
-    @Autowired
+
     private CategoryRepository categoryRepository;
-    @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    public TestConfig(CategoryRepository categoryRepository, ProductRepository productRepository) {
+        this.categoryRepository = categoryRepository;
+        this.productRepository = productRepository;
+    }
+
     @Override
     public void run(String... args)  {
         /*Product p1 = new Product(null,"Computer","a basic pc",1800.5,"url//",categoryRepository.findById(2L).orElseThrow());

@@ -1,0 +1,65 @@
+package com.example.peagacatalog.services;
+
+import com.example.peagacatalog.dto.ProductDTO;
+import com.example.peagacatalog.entities.Product;
+import com.example.peagacatalog.repositories.CategoryRepository;
+import com.example.peagacatalog.repositories.ProductRepository;
+import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.stream.Collectors;
+
+@Service
+public class ProductService {
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Transactional
+    public Page<ProductDTO> findAll(Pageable pg) {
+        return productRepository.findAll(pg).map(x->new ProductDTO(x, x.getCategories()));
+    }
+    @Transactional
+    public ProductDTO create(ProductDTO productDTO){
+        Product entity = new Product();
+        copyDTOToEntity(entity,productDTO);
+        return new ProductDTO(productRepository.save(entity),entity.getCategories());
+    }
+    @Transactional
+   public ProductDTO findById(Long id){
+        Product entity = productRepository.findById(id).orElseThrow(()-> new EntityNotFoundException(" Product not found by id: "+id));
+        return new ProductDTO(entity,entity.getCategories());
+    }
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO productDTO){
+        try{
+            Product entity = productRepository.getReferenceById(id);
+            copyDTOToEntity(entity,productDTO);
+            return new ProductDTO(productRepository.save(entity),entity.getCategories());
+        }catch (jakarta.persistence.EntityNotFoundException e){
+            throw new EntityNotFoundException("Resource not found by id: "+id);
+        }
+    }
+    public void deleteById(Long id){
+        if(productRepository.existsById(id))
+            productRepository.deleteById(id);
+        else
+            throw new EntityNotFoundException("Resource not found id: "+id);
+    }
+    private void copyDTOToEntity(Product entity,ProductDTO productDTO){
+        entity.setName(productDTO.getName());
+        entity.setDescription(productDTO.getDescription());
+        entity.setPrice(productDTO.getPrice());
+        entity.setImgUrl(productDTO.getImgUrl());
+        if(entity.getDate()==null)
+            entity.setDate(Instant.now());
+        entity.getCategories().addAll(productDTO.getCategories().stream().map((dto) -> categoryRepository.getReferenceById(dto.getId())).collect(Collectors.toList()));
+    }
+
+}

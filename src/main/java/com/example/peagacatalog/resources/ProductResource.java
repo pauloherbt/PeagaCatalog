@@ -3,9 +3,7 @@ package com.example.peagacatalog.resources;
 import com.example.peagacatalog.dto.ProductDTO;
 import com.example.peagacatalog.services.ProductService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +21,9 @@ public class ProductResource {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(defaultValue = "0") Integer pgNumber
-            , @RequestParam(defaultValue = " 10") Integer pgSize
-            , @RequestParam(defaultValue = "id") String orderBy
-            ,@RequestParam(defaultValue = "ASC") String direction) {
-        Pageable pg = PageRequest.of(pgNumber,pgSize, Sort.Direction.valueOf(direction),orderBy);
-        return ResponseEntity.ok(productService.findAll(pg));
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable page) {
+
+        return ResponseEntity.ok(productService.findAll(page));
     }
    @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id){

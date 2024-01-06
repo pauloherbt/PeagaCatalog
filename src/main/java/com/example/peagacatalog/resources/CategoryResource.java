@@ -3,8 +3,7 @@ package com.example.peagacatalog.resources;
 import com.example.peagacatalog.dto.CategoryDTO;
 import com.example.peagacatalog.services.CategoryService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +21,7 @@ public class CategoryResource {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(defaultValue = "0") Integer pgNumber, @RequestParam(defaultValue = " 10") Integer pgSize, @RequestParam(defaultValue = "id") String orderBy
-            ,@RequestParam(defaultValue = "ASC") String direction){
-        PageRequest pg = PageRequest.of(pgNumber,pgSize, Sort.Direction.valueOf(direction),orderBy);
+    public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pg){
         return ResponseEntity.ok(categoryService.findAllPaged(pg));
     }
     @GetMapping(value = "/{id}")

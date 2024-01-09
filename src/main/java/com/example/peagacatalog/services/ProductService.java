@@ -4,8 +4,10 @@ import com.example.peagacatalog.dto.ProductDTO;
 import com.example.peagacatalog.entities.Product;
 import com.example.peagacatalog.repositories.CategoryRepository;
 import com.example.peagacatalog.repositories.ProductRepository;
+import com.example.peagacatalog.services.exceptions.DbException;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,11 @@ public class ProductService {
     }
     public void deleteById(Long id){
         if(productRepository.existsById(id))
-            productRepository.deleteById(id);
+            try{
+                productRepository.deleteById(id);
+            }catch(DataIntegrityViolationException e){
+                throw new DbException("integrity violation exception");
+            }
         else
             throw new EntityNotFoundException("Resource not found id: "+id);
     }

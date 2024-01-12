@@ -1,5 +1,6 @@
 package com.example.peagacatalog.repositories;
 
+import com.example.peagacatalog.Factory;
 import com.example.peagacatalog.entities.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

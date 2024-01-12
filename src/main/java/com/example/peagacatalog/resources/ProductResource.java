@@ -22,7 +22,6 @@ public class ProductResource {
 
     @GetMapping()
     public ResponseEntity<Page<ProductDTO>> findAll(Pageable page) {
-
         return ResponseEntity.ok(productService.findAll(page));
     }
    @GetMapping(value = "/{id}")

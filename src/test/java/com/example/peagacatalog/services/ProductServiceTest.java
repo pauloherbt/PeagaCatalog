@@ -4,7 +4,7 @@ import com.example.peagacatalog.dto.ProductDTO;
 import com.example.peagacatalog.entities.Category;
 import com.example.peagacatalog.entities.Product;
 import com.example.peagacatalog.repositories.CategoryRepository;
-import com.example.peagacatalog.repositories.Factory;
+import com.example.peagacatalog.Factory;
 import com.example.peagacatalog.repositories.ProductRepository;
 import com.example.peagacatalog.services.exceptions.DbException;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
@@ -53,7 +53,6 @@ public class ProductServiceTest {
 
         when(productRepository.save(product)).thenReturn(product);
         when(productRepository.getReferenceById(existingId)).thenReturn(product);
-
 
         when(productRepository.existsById(existingId)).thenReturn(true);
         when(productRepository.existsById(nonExistingId)).thenReturn(false);

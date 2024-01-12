@@ -6,11 +6,11 @@ import com.example.peagacatalog.repositories.CategoryRepository;
 import com.example.peagacatalog.repositories.ProductRepository;
 import com.example.peagacatalog.services.exceptions.DbException;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.stream.Collectors;
@@ -50,15 +50,16 @@ public class ProductService {
             throw new EntityNotFoundException("Resource not found by id: "+id);
         }
     }
+    @Transactional
     public void deleteById(Long id){
-        if(productRepository.existsById(id))
-            try{
-                productRepository.deleteById(id);
-            }catch(DataIntegrityViolationException e){
-                throw new DbException("integrity violation exception");
-            }
-        else
-            throw new EntityNotFoundException("Resource not found id: "+id);
+        if(!productRepository.existsById(id))
+            throw new EntityNotFoundException("Resource not found by id: "+id);
+        try{
+            productRepository.deleteById(id);
+        }
+        catch(DataIntegrityViolationException e) {
+            throw new DbException("integrity violation exception");
+        }
     }
     private void copyDTOToEntity(Product entity,ProductDTO productDTO){
         entity.setName(productDTO.getName());

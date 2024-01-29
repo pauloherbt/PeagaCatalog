@@ -20,6 +20,9 @@ public class UserDTO {
         this.email = email;
     }
 
+    public UserDTO() {
+    }
+
     public UserDTO(User entity) {
         this(entity.getId(),entity.getFirstName(),entity.getLastName(),entity.getEmail());
         roles=entity.getRoles().stream().map(RoleDTO::new).collect(Collectors.toSet());

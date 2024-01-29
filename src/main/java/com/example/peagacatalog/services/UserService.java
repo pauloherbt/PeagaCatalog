@@ -1,14 +1,17 @@
 package com.example.peagacatalog.services;
 
 import com.example.peagacatalog.dto.UserDTO;
+import com.example.peagacatalog.dto.UserInsertDTO;
 import com.example.peagacatalog.entities.User;
 import com.example.peagacatalog.repositories.RoleRepository;
 import com.example.peagacatalog.repositories.UserRepository;
 import com.example.peagacatalog.services.exceptions.DbException;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,20 +21,22 @@ import java.util.stream.Collectors;
 public class UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
-
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
     @Transactional
     public Page<UserDTO> findAll(Pageable pg) {
         return userRepository.findAll(pg).map(UserDTO::new);
     }
     @Transactional
-    public UserDTO create(UserDTO userDTO){
+    public UserDTO create(UserInsertDTO userDTO){ //bad request when role id doesnt exist
         User entity = new User();
         copyDTOToEntity(entity,userDTO);
+        entity.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         return new UserDTO(userRepository.save(entity));
     }
     @Transactional
@@ -64,6 +69,7 @@ public class UserService {
         entity.setFirstName(userDTO.getFirstName());
         entity.setLastName(userDTO.getLastName());
         entity.setEmail(userDTO.getEmail());
+        entity.getRoles().clear();
         entity.getRoles().addAll(userDTO.getRoles()
                 .stream().map(x->roleRepository.getReferenceById(x.getId()))
                 .collect(Collectors.toSet()));

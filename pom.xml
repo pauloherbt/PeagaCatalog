@@ -55,8 +55,12 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
             </dependency>
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>10.13.0</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

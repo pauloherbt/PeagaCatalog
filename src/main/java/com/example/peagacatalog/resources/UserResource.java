@@ -1,8 +1,10 @@
 package com.example.peagacatalog.resources;
 
 import com.example.peagacatalog.dto.UserDTO;
-import com.example.peagacatalog.dto.UserInsertDTO;
+import com.example.peagacatalog.dto.validations.UserInsertDTO;
+import com.example.peagacatalog.dto.validations.UserUpdateDTO;
 import com.example.peagacatalog.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,13 +32,13 @@ public class UserResource {
         return ResponseEntity.ok(userService.findById(id));
     }
     @PostMapping
-    public ResponseEntity<UserDTO> create(@RequestBody UserInsertDTO userDTO){
+    public ResponseEntity<UserDTO> create(@Valid @RequestBody UserInsertDTO userDTO){
         UserDTO dtoCreated = userService.create(userDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(dtoCreated.getId());
         return ResponseEntity.created(uri).body(dtoCreated);
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> update(@PathVariable Long id,@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> update(@PathVariable Long id,@Valid @RequestBody UserUpdateDTO userDTO){
         UserDTO dto = userService.update(id,userDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(dto.getId());
         return ResponseEntity.status(HttpStatus.OK).location(uri).body(dto);

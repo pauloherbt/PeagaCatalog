@@ -1,6 +1,12 @@
-package com.example.peagacatalog.dto;
+package com.example.peagacatalog.dto.validations;
 
-public class UserInsertDTO extends UserDTO{
+import com.example.peagacatalog.dto.UserDTO;
+import com.example.peagacatalog.services.validation.UserInsertDTOValid;
+import jakarta.validation.constraints.NotBlank;
+
+@UserInsertDTOValid
+public class UserInsertDTO extends UserDTO {
+    @NotBlank
     private String password;
 
     public UserInsertDTO(String password) {

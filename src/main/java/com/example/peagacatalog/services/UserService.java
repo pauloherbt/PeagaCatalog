@@ -1,7 +1,7 @@
 package com.example.peagacatalog.services;
 
 import com.example.peagacatalog.dto.UserDTO;
-import com.example.peagacatalog.dto.UserInsertDTO;
+import com.example.peagacatalog.dto.validations.UserInsertDTO;
 import com.example.peagacatalog.entities.User;
 import com.example.peagacatalog.repositories.RoleRepository;
 import com.example.peagacatalog.repositories.UserRepository;

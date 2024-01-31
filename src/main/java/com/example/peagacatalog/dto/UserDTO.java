@@ -1,20 +1,26 @@
 package com.example.peagacatalog.dto;
 
 import com.example.peagacatalog.entities.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserDTO {
-    private Long Id;
+    private Long id;
+    @NotBlank @Size(min = 3, max = 15)
     private String firstName;
+    @NotBlank
     private String lastName;
+    @Email @NotBlank
     private String email;
     private Set<RoleDTO> roles= new HashSet<>();
 
     public UserDTO(Long id, String firstName, String lastName, String email) {
-        Id = id;
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -29,11 +35,11 @@ public class UserDTO {
     }
 
     public Long getId() {
-        return Id;
+        return id;
     }
 
     public void setId(Long id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getFirstName() {

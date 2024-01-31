@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
-public class ProductRepositoryTest {
+class ProductRepositoryTest {
     private Long existingId;
     private Long nonExistingId;
     private Long totalProducts;

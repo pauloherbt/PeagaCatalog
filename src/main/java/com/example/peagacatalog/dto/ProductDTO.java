@@ -2,6 +2,7 @@ package com.example.peagacatalog.dto;
 
 import com.example.peagacatalog.entities.Category;
 import com.example.peagacatalog.entities.Product;
+import jakarta.validation.constraints.Positive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class ProductDTO {
     private Long id;
     private String name;
     private String description;
+    @Positive
     private Double price;
     private String imgUrl;
     private List<CategoryDTO> categories = new ArrayList<>();

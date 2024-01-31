@@ -22,7 +22,7 @@ public class CategoryService {
 
     public List<CategoryDTO> findAll() {
         List<CategoryDTO>  dtoList = new ArrayList<>();
-        categoryRepository.findAll().forEach((c)->dtoList.add(new CategoryDTO(c)));
+        categoryRepository.findAll().forEach(c->dtoList.add(new CategoryDTO(c)));
         //List<CategoryDTO>  dtoList= categoryRepository.findAll().stream().map(CategoryDTO::new).collect(Collectors.toList()); //(c)-> new CategoryDTO(c)
         return dtoList;
     }

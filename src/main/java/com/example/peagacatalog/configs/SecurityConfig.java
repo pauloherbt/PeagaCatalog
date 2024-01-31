@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -16,7 +15,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(CsrfConfigurer::disable);
-        httpSecurity.authorizeHttpRequests((authorize)->authorize.anyRequest().permitAll());
+        httpSecurity.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
         httpSecurity.headers(x-> x.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return httpSecurity.build();
     }

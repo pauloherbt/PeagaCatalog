@@ -2,6 +2,7 @@ package com.example.peagacatalog.resources;
 
 import com.example.peagacatalog.dto.ProductDTO;
 import com.example.peagacatalog.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class ProductResource {
         return ResponseEntity.ok(productService.findById(id));
     }
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO productDTO){
+    public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO productDTO){
         ProductDTO dtoCreated = productService.create(productDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").build(dtoCreated.getId());
         return ResponseEntity.created(uri).body(dtoCreated);

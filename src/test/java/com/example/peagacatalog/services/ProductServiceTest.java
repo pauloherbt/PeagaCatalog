@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class ProductServiceTest {
+class ProductServiceTest {
     @InjectMocks
     private ProductService productService;
     @Mock
@@ -113,7 +113,8 @@ public class ProductServiceTest {
     @Test
     void updateShouldThrowEntityNotFoundExceptionWhenNonExistingId(){
         when(productRepository.getReferenceById(nonExistingId)).thenThrow(jakarta.persistence.EntityNotFoundException.class);
-        assertThrows(EntityNotFoundException.class,()->productService.update(nonExistingId,Factory.creatProductDTO()));
+        ProductDTO dto=Factory.creatProductDTO();
+        assertThrows(EntityNotFoundException.class,()->productService.update(nonExistingId,dto));
         verify(productRepository,never()).save(ArgumentMatchers.any());
     }
 }

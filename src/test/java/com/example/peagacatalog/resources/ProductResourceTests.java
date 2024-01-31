@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductResource.class) //usa mockbean
-public class ProductResourceTests {
+class ProductResourceTests {
     @MockBean
     private ProductService productService;
     @Autowired

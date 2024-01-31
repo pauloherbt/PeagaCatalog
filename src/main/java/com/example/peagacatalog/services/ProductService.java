@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -68,7 +67,7 @@ public class ProductService {
         entity.setImgUrl(productDTO.getImgUrl());
         if(entity.getDate()==null)
             entity.setDate(Instant.now());
-        entity.getCategories().addAll(productDTO.getCategories().stream().map((dto) -> categoryRepository.getReferenceById(dto.getId())).collect(Collectors.toList()));
+        entity.getCategories().addAll(productDTO.getCategories().stream().map(dto -> categoryRepository.getReferenceById(dto.getId())).toList());
     }
 
 }

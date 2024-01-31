@@ -6,7 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,7 +52,7 @@ class ProductRepositoryTest {
     }
     @Test
     void createShouldCreateNewProductWhenIdIsNull(){
-        Product product= Factory.createProduct();
+        Product product= new Product(null,"Teste","Teste",5.0,"teste", Instant.now());
         product = productRepository.save(product);
         assertEquals(totalProducts+1,product.getId());
         assertEquals(totalProducts+1,productRepository.count());

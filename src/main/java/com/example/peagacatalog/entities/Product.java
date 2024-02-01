@@ -84,11 +84,10 @@ public class Product {
     public Instant getDate() {
         return date;
     }
-
-    public void setDate(Instant date) {
-        this.date = date;
+    @PrePersist
+    public void setDate() {
+        this.date = Instant.now();
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

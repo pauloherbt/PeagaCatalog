@@ -19,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +56,14 @@ class ProductServiceTest {
         when(productRepository.existsById(existingId)).thenReturn(true);
         when(productRepository.existsById(nonExistingId)).thenReturn(false);
     }
-
+    @Test
+    void createShouldReturnAProductDTO(){
+        ProductDTO productDTO = Factory.creatProductDTO();
+        ProductDTO out=productService.create(productDTO);
+        assertNotNull(out);
+        assertNotEquals(productDTO,out);
+        verify(productRepository).save(ArgumentMatchers.any());
+    }
     @Test
     void deleteShouldDoNothingWhenExistingId() {
         doNothing().when(productRepository).deleteById(existingId);

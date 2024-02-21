@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -53,7 +52,7 @@ class ProductResourceTests {
     }
     @Test
     void findByIdShouldReturnAProductDtoWhenIdExists() throws Exception {
-        when(productService.findById(existingId)).thenReturn(Factory.creatProductDTO());
+        when(productService.findById(existingId)).thenReturn(Factory.createProductDtoWithId());
         mockMvc.perform(get("/products/{id}",existingId))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(existingId));
     }
@@ -89,7 +88,7 @@ class ProductResourceTests {
     }
     @Test
     void createShouldReturnCreatedAndAProductDTO() throws Exception {
-        when(productService.create(any())).thenReturn(productDTO);
+        when(productService.create(any())).thenReturn(Factory.createProductDtoWithId());
         mockMvc.perform(post("/products").content(objectMapper.writeValueAsString(productDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated()).andExpect(header().exists("Location")).andExpect(jsonPath("$.id").exists());
     }

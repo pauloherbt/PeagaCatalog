@@ -7,10 +7,15 @@ import com.example.peagacatalog.repositories.RoleRepository;
 import com.example.peagacatalog.repositories.UserRepository;
 import com.example.peagacatalog.services.exceptions.DbException;
 import com.example.peagacatalog.services.exceptions.EntityNotFoundException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
+    private static Logger logger = LogManager.getLogger(UserService.class);
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -75,4 +81,9 @@ public class UserService {
                 .collect(Collectors.toSet()));
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        logger.info("Finding User");
+        return userRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("User not found"));
+    }
 }

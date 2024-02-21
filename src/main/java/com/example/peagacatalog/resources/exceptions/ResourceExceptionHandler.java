@@ -9,6 +9,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 
@@ -34,6 +35,11 @@ public class ResourceExceptionHandler {
             error.addError(fieldError.getField(),fieldError.getDefaultMessage());
         }
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
-
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<StandardError> invalidRequestSyntax(MethodArgumentTypeMismatchException e, HttpServletRequest servletRequest){
+        StandardError standardError = new StandardError(Instant.now(), HttpStatus.BAD_REQUEST.value()
+                , "Falha na requisição",e.getMessage(),servletRequest.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standardError);
     }
 }

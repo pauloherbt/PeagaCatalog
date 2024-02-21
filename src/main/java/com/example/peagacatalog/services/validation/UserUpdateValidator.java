@@ -30,17 +30,18 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdateDTOVal
 
     @Override
     public boolean isValid(UserUpdateDTO userUpdateDTO, ConstraintValidatorContext constraintValidatorContext) {
-        User userFound;
         List<FieldMessage> errors = new ArrayList<>();
-        if((userFound= userRepository.findByEmail(userUpdateDTO.getEmail()))!=null){
+        User userFound= userRepository.findByEmail(userUpdateDTO.getEmail()).orElse(null);
             /*String path[] = httpServletRequest.getServletPath().split("/");
             String resource = path[path.length-1];
             if(!resource.equals(String.valueOf(userFound.getId()))){*/
             //bizzaro isso aqui
-            var map = (Map<String,String>) httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-            if(!map.get("id").equals(userFound.getId().toString()))
-                errors.add(new FieldMessage("email", "email already registered"));
-        }
+            if(userFound!=null) {
+                var map = (Map<String,String>) httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+                if(!map.get("id").equals(userFound.getId().toString()))
+                    errors.add(new FieldMessage("email", "email already registered"));
+            }
+
         for (FieldMessage error : errors) {
             constraintValidatorContext.disableDefaultConstraintViolation();
             constraintValidatorContext.buildConstraintViolationWithTemplate(error.getMessage()).addPropertyNode(error.getField()).addConstraintViolation();
